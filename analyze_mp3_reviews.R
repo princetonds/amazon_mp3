@@ -5,7 +5,7 @@
 # 
 ##############################################
 
-lapply(c("data.table", "ggplot2"), require, character.only=T)
+lapply(c("data.table", "ggplot2", "tm"), require, character.only=T)
 
 if (!exists("df.mp3")) {
   df.mp3 <- as.data.frame(fread("mp3_reviews.csv"))
@@ -25,7 +25,6 @@ if (!exists("df.mp3")) {
 
 # Example of clustering reviews to find patterns. (Let's compare 5-star reviews to 1-star reviews.)
 # PCA -> KMeans
-require(tm)
 # 1 star reviews
 corpus.one.star <- Corpus(VectorSource(df.mp3$fullText[df.mp3$rating == 1]))
 tdm.one.star <- TermDocumentMatrix(corpus.one.star)
