@@ -18,17 +18,9 @@ if (!exists("df.mp3")) {
   df.mp3[,c("productName")] <- as.factor(df.mp3$productName)
   
   # preprocess text
-  require(qdap)
   df.mp3[,c("fullText", "reviewTitle")] <- apply(df.mp3[,c("fullText", "reviewTitle")], 2, tolower)
   df.mp3[,c("fullText", "reviewTitle")] <- data.frame(gsub("&quot;", "", as.matrix(df.mp3[,c("fullText", "reviewTitle")])),
                                                       stringsAsFactors=F)
-  
-  # remove stopwords (leave out if you want the raw review text)
-  f_remove_stopwords <- function(x) {
-    return(paste(rm_stopwords(x, unlist=T, strip=T, apostrophe.remove=T), collapse=" "))
-  }
-  df.mp3$fullText <- as.character(sapply(df.mp3$fullText, f_remove_stopwords))
-  df.mp3$reviewTitle <- as.character(sapply(df.mp3$reviewTitle, f_remove_stopwords))
 }
 
 # Example of clustering reviews to find patterns. (Let's compare 5-star reviews to 1-star reviews.)
@@ -44,13 +36,13 @@ mat.one.star <- scale(mat.one.star, center=T) # scale and center for PCA
 # print("Running PCA ...")
 # pca.one.star <- prcomp(mat.one.star, scale=TRUE, center=TRUE)
 
-# run Kmeans
-print("Running KMeans ...")
-kmeans.one.stars <- kmeans(mat.one.star, centers=3)
-kmeans.one.stars.labels <- kmeans.one.stars$cluster
-df.mp3$cluster <- rep(NA, nrow(df.mp3))
-df.mp3$cluster[df.mp3$rating == 1] <- kmeans.one.stars.labels
-qplot(df.mp3$cluster)
+# # run Kmeans
+# print("Running KMeans ...")
+# kmeans.one.stars <- kmeans(mat.one.star, centers=3)
+# kmeans.one.stars.labels <- kmeans.one.stars$cluster
+# df.mp3$cluster <- rep(NA, nrow(df.mp3))
+# df.mp3$cluster[df.mp3$rating == 1] <- kmeans.one.stars.labels
+# qplot(df.mp3$cluster)
 
 
 
